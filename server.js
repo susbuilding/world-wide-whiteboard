@@ -1,53 +1,53 @@
-var path = require('path');
+let path = require('path');
 
-var http = require('http');
-var server = http.createServer();
+let http = require('http');
+let server = http.createServer();
 
 //socket
-var socketio = require('socket.io');
+let socketio = require('socket.io');
 
-var express = require('express');
-var app = express();
+let express = require('express');
+let app = express();
 
 server.on('request', app);
 
 //creating new connection for web sockets and integrating with HTTP server. variable that has access to server. manage relationship between client and server.
-var io = socketio(server); //this has to be below the server.on line
+let io = socketio(server); //this has to be below the server.on line
 
-var nsp = io.of('/myroom');
-nsp.on('connection', function(socket) {
+let nsp = io.of('/myroom');
+nsp.on('connection', (socket) => {
     console.log('someone to our room')
 })
 
-var draws = [];
+let draws = [];
 //when connection gets made to server
 /* This function receives the newly connected socket.
        This function will be called for EACH browser that connects to our server. */
-io.on('connection', function(socket) {
+io.on('connection', (socket) => {
     socket.emit('initialDrawing', draws);
     console.log('new client has connected');
     console.log(socket.id)
-    socket.on('disconnect', function(){
+    socket.on('disconnect', () => {
         console.log('someone disconnected!')
     })
-    socket.on('draw', function(personDrawData){
+    socket.on('draw', (personDrawData) => {
         draws.push(personDrawData)
         socket.broadcast.emit('draw', personDrawData)
     })
 })
 
 //server
-server.listen(1337, function () {
+server.listen(1337, () => {
     console.log('The server is listening on port 1337!');
 });
 
 
 app.use(express.static(path.join(__dirname, 'browser')));
 
-app.get('/', function (req, res) {
+app.get('/', (req, res) => {
     res.sendFile(path.join(__dirname, 'index.html'));
 });
 
-app.get('/myroom', function (req, res) {
+app.get('/myroom', (req, res) => {
     res.sendFile(path.join(__dirname, 'index.html'));
 });
