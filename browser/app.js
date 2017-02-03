@@ -1,7 +1,7 @@
 //FRONT END
 
 //making socket connection for that tab
-var socket = io('/')
+var socket = io(window.location.origin);
 
 //connect happening on browser
 socket.on('connect', function(){
@@ -20,6 +20,7 @@ socket.on('draw', function(personDrawData){
   whiteboard.draw(...personDrawData);
 })
 
+//for the persistence on refresh
 socket.on('initialDrawing', function(draws){
   console.log('wehere!')
   draws.forEach((data) => {
