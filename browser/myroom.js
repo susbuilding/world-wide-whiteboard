@@ -1,11 +1,11 @@
 //FRONT END
 
 //making socket connection for that tab
-var socket = io('/')
+var socket = io('/myroom')
 
 //connect happening on browser
 socket.on('connect', function(){
-  console.log('i have made a persistent 2-way connection to server!')
+  console.log('our room!')
 })
 
 window.whiteboard.on('draw', function(start, end, strokeColor){
@@ -20,10 +20,3 @@ socket.on('draw', function(personDrawData){
   whiteboard.draw(...personDrawData);
 })
 
-socket.on('initialDrawing', function(draws){
-  console.log('wehere!')
-  draws.forEach((data) => {
-    whiteboard.draw(...data)
-  })
-
-})
